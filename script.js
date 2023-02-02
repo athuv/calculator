@@ -1,5 +1,5 @@
-const firstOperand = 0;
-const secondOperand = 0;
+let firstOperand = 0;
+let secondOperand = 0;
 let operator;
 let results = 0;
 let decimalLength = 0;
@@ -21,13 +21,6 @@ function operate(firstOperand, operator, secondOperand) {
     return results.toFixed(decimalLength);
 }
 
-function isDecimal(firstOperand, secondOperand){
-    if(!Number.isInteger(firstOperand) || !Number.isInteger(secondOperand)){
-        return true;
-    }
-        return false;
-}
-
 function decimalCount(firstOperand, secondOperand){
     let firstLength = 0;
     let secondLength = 0;
@@ -41,6 +34,14 @@ function decimalCount(firstOperand, secondOperand){
     }    
 
     return Math.max(firstLength, secondLength);
+}
+
+function clearAll(){
+    firstOperand = 0;
+    secondOperand = 0;
+    operator = undefined;
+    results = 0;
+    decimalLength = 0;
 }
 
 // // operate(2,2,'+');
