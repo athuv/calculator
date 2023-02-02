@@ -104,6 +104,18 @@ footer {
     
 }
 
+.buttons .btn-column .btn-row:hover {
+    cursor: pointer;
+    box-shadow: 0 0 20px #b6ff00;
+}
+
+.buttons .btn-column .btn-row:active {
+    cursor: pointer;
+    /* text-shadow: 0 0 60px #b6ff00; */
+    /* text-shadow: 1px 1px 2px #b6ff00, 0 0 1em #b6ff00, 0 0 0.2em #b6ff00; */
+    color: #b6ff00;
+}
+
 .btn-column-5  .btn-row-1 {
     flex-grow: 2;
     width: auto !important;
