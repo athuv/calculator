@@ -1,55 +1,46 @@
 const firstOperand = 0;
 const secondOperand = 0;
 let operator;
-let results;
+let results = 0;
+let decimalLength = 0;
 
 function operate(firstOperand, operator, secondOperand) {
+
+    decimalLength = decimalCount(firstOperand, secondOperand);
+
     if(operator === '+'){
-        return add(firstOperand, secondOperand);
+        results ? results += secondOperand : results = firstOperand + secondOperand;
     }else if(operator === '-'){
-        return subtract(firstOperand, secondOperand);
+        results ? results -= secondOperand : results = firstOperand - secondOperand;
     }else if(operator === '*'){
-        return multiply(firstOperand, secondOperand);
+        results ? results *= firstOperand : results = firstOperand * secondOperand;
     }else if(operator === '/'){
-        return divide(firstOperand, secondOperand);
+        results ? results /= secondOperand : results = firstOperand / secondOperand;
     }
+
+    return results.toFixed(decimalLength);
 }
 
-function add(firstOperand, secondOperand){ 
-    if(results){
-        results = secondOperand + results;
-        return results;
+function isDecimal(firstOperand, secondOperand){
+    if(!Number.isInteger(firstOperand) || !Number.isInteger(secondOperand)){
+        return true;
     }
-    console.log(`not empty`);
-    results = firstOperand + secondOperand;
-    return results;
+        return false;
 }
 
-function subtract(firstOperand, secondOperand){ 
-    if(results){
-        results = secondOperand - results;
-        return results;
-    }
-    results = firstOperand - secondOperand;
-    return results;
-}
+function decimalCount(firstOperand, secondOperand){
+    let firstLength = 0;
+    let secondLength = 0;
 
-function multiply(firstOperand, secondOperand){ 
-    if(results){
-        results = secondOperand * results;
-        return results;
+    if(!Number.isInteger(firstOperand)){
+        firstLength   = firstOperand.toString().split('.')[1].length;
     }
-    results = firstOperand * secondOperand;
-    return results;
-}
+    
+    if(!Number.isInteger(secondOperand)){
+        secondLength  = secondOperand.toString().split('.')[1].length;
+    }    
 
-function divide(firstOperand, secondOperand){ 
-    if(results){
-        results = secondOperand / results;
-        return results.toFixed(10);
-    }
-    results = firstOperand / secondOperand;
-    return results.toFixed(10);;
+    return Math.max(firstLength, secondLength);
 }
 
 // // operate(2,2,'+');
