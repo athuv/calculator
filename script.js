@@ -5,7 +5,6 @@ let results = 0;
 let decimalLength = 0;
 let secondOperandTemp;
 let firstOperandTemp;
-let isEqual;
 
 let operand = document.querySelectorAll('.btn');
 operand.forEach(function(btns) {    
@@ -35,11 +34,9 @@ function checkValue(){
         
         if(firstOperand !== '' && secondOperand !== ''){
             
-            isEqual = true;
-            fin = operate(parseFloat(firstOperand),operator,parseFloat(secondOperand),isEqual);
+            fin = operate(parseFloat(firstOperand),operator,parseFloat(secondOperand),true);
             secondOperandTemp = secondOperand;
             secondOperand = '';
-            isEqual = false;
             if(currentValue !== '='){
                 operator = currentValue;
                 
@@ -49,12 +46,9 @@ function checkValue(){
             
             if(currentValue !== '='){
                 operator = currentValue;                
-                if(operator === '*'){
-                    isEqual = false;
-                }
                 console.log(`${operator} `);
             }else{
-                fin = operate(parseFloat(firstOperand),operator,parseFloat(secondOperandTemp),isEqual);
+                fin = operate(parseFloat(firstOperand),operator,parseFloat(secondOperandTemp),false);
                 console.log(`== ${fin}`);
                 console.log(`== ${operator}`);
             }
@@ -92,7 +86,7 @@ function operate(firstOperand, operator, secondOperand, isEqual) {
                 
                 
             }else{
-                console.log('false');
+                (firstOperandTemp === undefined) ? firstOperandTemp = firstOperand : null;
                 results *= firstOperandTemp;
                 
             }
