@@ -5,15 +5,21 @@ let results = 0;
 let decimalLength = 0;
 let secondOperandTemp;
 let firstOperandTemp;
+let tempOperand;
 
+let displayResult = document.querySelector('.display-result');
+let displayValue = document.querySelector('.display-value');
 let operand = document.querySelectorAll('.btn');
+
 operand.forEach(function(btns) {    
     btns.addEventListener("click", checkValue);
 });
 
 function checkValue(){
-    let currentValue = this.getAttribute('data-button');
-    let fin;
+    let currentValue = this.getAttribute('data-button');    
+    let finalResults;
+    let displayText;
+ 
 
     if(currentValue === 'allClear'){
         clearAll();
@@ -23,33 +29,44 @@ function checkValue(){
     if(!isNaN(currentValue) || currentValue === "." || currentValue === 'negative'){
         if(!operator && secondOperand == 0){
             (currentValue === 'negative') ? (firstOperand = firstOperand * -1) : (firstOperand += currentValue);
-            console.log(`${firstOperand} `);
+            displayResult.innerText = firstOperand;
+            
         }else{
             (currentValue === 'negative') ? (secondOperand = secondOperand * -1) : (secondOperand += currentValue);
-            console.log(`${secondOperand}`);   
+            displayResult.innerText += secondOperand; 
         }
     }else{
-        
-
-        
         if(firstOperand !== '' && secondOperand !== ''){
             
-            fin = operate(parseFloat(firstOperand),operator,parseFloat(secondOperand),true);
+            finalResults = operate(parseFloat(firstOperand),operator,parseFloat(secondOperand),true);
+            
             secondOperandTemp = secondOperand;
             secondOperand = '';
             if(currentValue !== '='){
-                operator = currentValue;
                 
+                console.log(`if here ${tempOperand}`);
+                 if(tempOperand === undefined){
+                     tempOperand = firstOperand;
+                 }
+                displayText = `${tempOperand}${operator}${secondOperandTemp}=${finalResults}`;
+                tempOperand = finalResults;
+                displayValue.innerText =  displayText;
+                operator = currentValue;
+                displayResult.innerText = `${finalResults}${operator}`;
+                
+            }else{
+                displayResult.innerText = finalResults;
+                displayValue.innerText =  `${firstOperand}${operator}${secondOperandTemp}=${finalResults}`;
             }
-            console.log(`= ${fin}`);
+            
         }else if(firstOperand !== '' && secondOperand === ''){            
             
             if(currentValue !== '='){
-                operator = currentValue;                
-                console.log(`${operator} `);
+                operator = currentValue; 
+                displayResult.innerText += operator;
             }else{
-                fin = operate(parseFloat(firstOperand),operator,parseFloat(secondOperandTemp),false);
-                console.log(`== ${fin}`);
+                finalResults = operate(parseFloat(firstOperand),operator,parseFloat(secondOperandTemp),false);
+                console.log(`== ${finalResults}`);
                 console.log(`== ${operator}`);
             }
             
@@ -83,7 +100,6 @@ function operate(firstOperand, operator, secondOperand, isEqual) {
                 console.log('true');
                 firstOperandTemp = results;
                 results *= secondOperand;
-                
                 
             }else{
                 (firstOperandTemp === undefined) ? firstOperandTemp = firstOperand : null;
@@ -129,6 +145,10 @@ function clearAll(){
     operator = undefined;
     results = 0;
     decimalLength = 0;
+    displayResult.innerText = 0;
+    displayValue.innerText = 0;
+    secondOperandTemp = undefined;
+    firstOperandTemp = undefined;
 }
 
 // // operate(2,2,'+');
