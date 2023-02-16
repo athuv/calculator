@@ -5,35 +5,132 @@ let results = 0;
 let decimalLength = 0;
 let secondOperandTemp;
 let firstOperandTemp;
-let tempOperand;
+let firstOperandDisplay;
 
 let displayResult = document.querySelector('.display-result');
 let displayValue = document.querySelector('.display-value');
 let operand = document.querySelectorAll('.btn');
 
 operand.forEach(function(btns) {    
-    btns.addEventListener("click", checkValue);
+    btns.addEventListener("click", buttonClick);
 });
 
-function checkValue(){
-    let currentValue = this.getAttribute('data-button');    
+document.addEventListener("keydown", keyPress);
+
+function keyPress(e){
+    let pressedKey = '';
+    switch(e.key){
+        case '0':
+            pressedKey = 0;
+            break;
+        case '1':
+            pressedKey = 1;
+            break;
+        case '2':
+            pressedKey = 2;
+            break;
+        case '3':
+            pressedKey = 3;
+            break;
+        case '4':
+            pressedKey = 4;
+            break;
+        case '5':
+            pressedKey = 5;
+            break;
+        case '6':
+            pressedKey = 6;
+            break;
+        case '7':
+            pressedKey = 7;
+            break;
+        case '8':
+            pressedKey = 8;
+            break;
+        case '9':
+            pressedKey = 9;
+            break;
+        case '+':
+            pressedKey = '+';
+            break;
+        case '-':
+            pressedKey = '-';
+            break;
+        case '*':
+            pressedKey = '*';
+            break;
+        case '/':
+            pressedKey = '/';
+            break;
+        case '.':
+            pressedKey = '.';
+            break;
+        case 'a':
+            pressedKey = 'allClear';
+            break;
+        case '=':
+            pressedKey = '=';
+            
+    }
+    
+    checkValue(pressedKey);
+}
+
+function buttonClick(){
+    checkValue(this.getAttribute('data-button'));
+}
+
+function checkValue(currValue){
+    let currentValue = currValue;    
     let finalResults;
     let displayText;
  
-
     if(currentValue === 'allClear'){
         clearAll();
     }
 
 
     if(!isNaN(currentValue) || currentValue === "." || currentValue === 'negative'){
-        if(!operator && secondOperand == 0){
-            (currentValue === 'negative') ? (firstOperand = firstOperand * -1) : (firstOperand += currentValue);
+
+        if(!operator && secondOperand == ''){
+            if(currentValue === '.'){
+                if(firstOperand === ''){
+                    firstOperand = 0;
+                }else{
+                    if(firstOperand.includes('.')){
+                        currentValue = '';
+                    }
+                }
+            }
+
+            if(currentValue === 'negative'){
+                if(firstOperand === ''){
+                    firstOperand = 0 * -1;
+                }else{
+                    firstOperand = firstOperand * -1;
+                }
+            }else{
+                firstOperand += currentValue
+            }
+
+            // (currentValue === 'negative') ? (firstOperand = firstOperand * -1) : firstOperand += currentValue;
+
             displayResult.innerText = firstOperand;
             
         }else{
-            (currentValue === 'negative') ? (secondOperand = secondOperand * -1) : (secondOperand += currentValue);
-            displayResult.innerText += secondOperand; 
+            if(currentValue === '.'){
+                if(secondOperand === ''){
+                    secondOperand = 0;
+                }else{
+                    if(secondOperand.includes('.')){
+                        currentValue = '';
+                    }
+                }
+            }
+
+            (currentValue === 'negative') ? (secondOperand = secondOperand * -1) : null;
+            secondOperand += currentValue;
+            displayResult.innerText += currentValue;
         }
     }else{
         if(firstOperand !== '' && secondOperand !== ''){
@@ -42,21 +139,24 @@ function checkValue(){
             
             secondOperandTemp = secondOperand;
             secondOperand = '';
+
+            if(firstOperandDisplay === undefined){
+                firstOperandDisplay = firstOperand;
+            }
+
             if(currentValue !== '='){
                 
-                console.log(`if here ${tempOperand}`);
-                 if(tempOperand === undefined){
-                     tempOperand = firstOperand;
-                 }
-                displayText = `${tempOperand}${operator}${secondOperandTemp}=${finalResults}`;
-                tempOperand = finalResults;
+                
+                displayText = `${firstOperandDisplay}${operator}${secondOperandTemp}=${finalResults}`;
+                firstOperandDisplay = finalResults;
                 displayValue.innerText =  displayText;
                 operator = currentValue;
                 displayResult.innerText = `${finalResults}${operator}`;
                 
             }else{
                 displayResult.innerText = finalResults;
-                displayValue.innerText =  `${firstOperand}${operator}${secondOperandTemp}=${finalResults}`;
+                displayValue.innerText =  `${firstOperandDisplay}${operator}${secondOperandTemp}=${finalResults}`;
+                firstOperandDisplay = finalResults;
             }
             
         }else if(firstOperand !== '' && secondOperand === ''){            
@@ -66,8 +166,10 @@ function checkValue(){
                 displayResult.innerText += operator;
             }else{
                 finalResults = operate(parseFloat(firstOperand),operator,parseFloat(secondOperandTemp),false);
-                console.log(`== ${finalResults}`);
-                console.log(`== ${operator}`);
+                displayResult.innerText = finalResults;
+                (operator === '*') ? displayText = `${firstOperandDisplay}${operator}${firstOperand}=${finalResults}` : displayText = `${firstOperandDisplay}${operator}${secondOperandTemp}=${finalResults}` ;
+                displayValue.innerText =  displayText;
+                firstOperandDisplay = finalResults;
             }
             
         }else{
@@ -97,7 +199,7 @@ function operate(firstOperand, operator, secondOperand, isEqual) {
         if(results !== 0){
             
             if(isEqual){
-                console.log('true');
+                
                 firstOperandTemp = results;
                 results *= secondOperand;
                 
@@ -105,10 +207,7 @@ function operate(firstOperand, operator, secondOperand, isEqual) {
                 (firstOperandTemp === undefined) ? firstOperandTemp = firstOperand : null;
                 results *= firstOperandTemp;
                 
-            }
-            // isEqual ? (console.log('true'),results *= secondOperand, secondOperand = results) : (console.log('false'),results *= firstOperand);
-            //results *= firstOperand;
-            
+            }            
         }else{
             results = firstOperand * secondOperand;
         }
@@ -120,7 +219,7 @@ function operate(firstOperand, operator, secondOperand, isEqual) {
         }
     }
 
-
+   // firstOperandTemp = results;
     return results.toFixed(decimalLength);
 }
 
